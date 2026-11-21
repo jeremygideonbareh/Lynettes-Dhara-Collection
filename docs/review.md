@@ -1,5 +1,7 @@
 # Independent design review
 
+> These scores are for the first version of the site (before the November 2026 motion rebuild). See docs/art-direction.md for the current build.
+
 Two rounds used the desktop and mobile site, browser screenshots and source. A score of 8/10 was required for the demo.
 
 | Category | Round 1 | Round 2 |
