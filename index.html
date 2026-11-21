@@ -54,7 +54,9 @@
   document.addEventListener('cloth:ready',function(){got.cloth=1});
   document.addEventListener('cloth:none',function(){got.cloth=1});
   setTimeout(function(){got.fonts=got.load=got.cloth=1},4500);
-  window.__loaderFinish=function(){if(finished)return;finished=true;window.__loaderDone=true;document.dispatchEvent(new Event('loader:done'));
+  window.__loaderFinish=function(){if(finished)return;finished=true;window.__loaderDone=true;
+    cnt.textContent='100';bar.style.transform='scaleX(1)';nd.style.left='100%';L.classList.add('is-woven');
+    document.dispatchEvent(new Event('loader:done'));
     setTimeout(function(){if(L.style.display!=='none'){L.style.transition='opacity .6s';L.style.opacity=0;setTimeout(function(){L.style.display='none'},650)}},3500)};
   function tick(now){
     var real=(got.fonts+got.load+got.cloth)/3, time=Math.min(1,(now-t0)/2000);
