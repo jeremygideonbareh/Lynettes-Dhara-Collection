@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Dep Thaiñ",
+    "image": "assets/ranges/dep-thain.webp",
+    "alt": "Maroon fabric with a narrow gold-toned border.",
+    "url": "https://www.instagram.com/stories/highlights/18119362769105752/",
+    "width": 150,
+    "height": 150
+  },
+  {
+    "name": "Full Khor",
+    "image": "assets/ranges/full-khor.webp",
+    "alt": "Warm rose-coloured cloth filled with a repeating gold-toned pattern.",
+    "url": "https://www.instagram.com/stories/highlights/18430763203146649/",
+    "width": 150,
+    "height": 150
+  },
+  {
+    "name": "Mukhla",
+    "image": "assets/ranges/mukhla.webp",
+    "alt": "Gold-toned cloth with bands of red floral detailing.",
+    "url": "https://www.instagram.com/stories/highlights/18414003151087281/",
+    "width": 150,
+    "height": 150
+  },
+  {
+    "name": "Premium",
+    "image": "assets/ranges/premium.webp",
+    "alt": "Pale fabric with two dark patterned borders.",
+    "url": "https://www.instagram.com/stories/highlights/18043319141823893/",
+    "width": 150,
+    "height": 150
+  },
+  {
+    "name": "Mukhli",
+    "image": "assets/ranges/mukhli.webp",
+    "alt": "A hand holding a folded piece of blue fabric.",
+    "url": "https://www.instagram.com/stories/highlights/18442904701130314/",
+    "width": 150,
+    "height": 150
+  }
+]
