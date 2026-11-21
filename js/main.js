@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Reading pauses and travel lengths, in viewport heights. Declared first so initMotion can read it.
   var SCROLL_MAP = {
-    heroHold: 0.9,      // hero pinned while the cloth unfurls and the name drifts apart
+    heroHold: 0.75,     // hero pinned while the cloth unfurls and the name drifts apart
     storyHold: 1.5,     // manifesto pinned while its words light up
     trackLead: 0.22,    // pause before the colour rail starts moving
     trackTail: 0.15,    // pause after the last card
@@ -229,12 +229,13 @@ document.addEventListener('DOMContentLoaded', function () {
       var dist = function () { return Math.max(0, rail.scrollWidth - window.innerWidth); };
       var lead = SCROLL_MAP.trackLead, tail = SCROLL_MAP.trackTail;
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      tl.to({}, { duration: lead + .06 });
-      // the heading clears out completely before the rail starts to travel (it stays on phones, where it has its own row)
-      if (!touch) tl.to(head, { x: -140, opacity: 0, duration: lead * .6 }, lead * .3);
-      tl.to(rail, { x: function () { return -dist(); }, duration: 1 }, lead + .06)
+      var rs = lead * .8; // rail starts as the heading finishes fading, so there is no empty beat
+      tl.to({}, { duration: rs });
+      // the heading clears out before the rail reaches it (it stays on phones, where it has its own row)
+      if (!touch) tl.to(head, { x: -140, opacity: 0, duration: lead * .6 }, lead * .2);
+      tl.to(rail, { x: function () { return -dist(); }, duration: 1 }, rs)
         .to({}, { duration: tail });
-      var span = 1 + lead + .06 + tail;
+      var span = rs + 1 + tail;
       var active = false, current = -1, n = cards.length;
       function setCurrent(bi) {
         if (bi === current) return;
@@ -247,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
         end: function () { return '+=' + (dist() * SCROLL_MAP.trackSpeed + vh() * (lead + tail)); },
         onToggle: function (s) { active = s.isActive; gsap.to(html, { '--glow-o': s.isActive ? .32 : 0, duration: .8 }); },
         onUpdate: function (s) {
-          var p = gsap.utils.clamp(0, 1, s.progress * span - lead - .06);
+          var p = gsap.utils.clamp(0, 1, s.progress * span - rs);
           bar.style.transform = 'scaleX(' + p + ')';
           setCurrent(Math.round(p * (n - 1)));
         }
@@ -274,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
       rail.addEventListener('focusin', function (e) {
         var card = e.target.closest('.shade'); if (!card) return;
         var i = cards.indexOf(card); if (i < 0) i = n - 1;
-        var p = (lead + .06 + i / (n - 1)) / span;
+        var p = (rs + i / (n - 1)) / span;
         var y = st.start + (st.end - st.start) * p;
         if (lenis) lenis.scrollTo(y, { duration: .8 }); else window.scrollTo(0, y);
       });
@@ -449,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var d = (i % 4) * .08;
         gsap.to(f, { clipPath: FOLD_TO, duration: 1.3, delay: d, ease: 'expo.inOut', onComplete: function () { f.style.clipPath = 'none'; } });
         gsap.from(im, { scale: 1.4, yPercent: -6, duration: 1.8, delay: d, ease: 'expo.out' });
-        gsap.from(card.querySelector('.pcard__meta'), { y: 24, opacity: 0, duration: 1, delay: d + .3, ease: 'expo.out' });
+        gsap.fromTo(card.querySelector('.pcard__meta'), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: d + .3, ease: 'expo.out' });
       };
       // already on screen (or above it) after a filter change: reveal now instead of waiting for a trigger
       if (card.getBoundingClientRect().top < window.innerHeight * .94) go();

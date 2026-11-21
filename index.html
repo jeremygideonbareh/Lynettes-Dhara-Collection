@@ -50,7 +50,7 @@
   var cnt=L.querySelector('.loader__count'), bar=L.querySelector('.loader__thread i'), nd=L.querySelector('.loader__thread b');
   var t0=performance.now(), shown=0, got={fonts:0,load:0,cloth:0}, finished=false, repeat=false;
   try{repeat=!!sessionStorage.getItem('ldc-intro')}catch(e){}
-  var MIN=repeat?800:2000; if(repeat){L.classList.add('is-quick');got.cloth=1} /* reloads in the same visit get a short version */
+  var MIN=repeat?800:2000; if(repeat){L.classList.add('is-quick');got.load=got.cloth=1} /* cached: wait for fonts only */ /* reloads in the same visit get a short version */
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){got.fonts=1});else got.fonts=1;
   addEventListener('load',function(){got.load=1});
   document.addEventListener('cloth:ready',function(){got.cloth=1});

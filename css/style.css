@@ -610,3 +610,10 @@ html.reduced .look__pin{height:auto}
   .fab.mini span{display:none}
   .shade__sub{display:none}
 }
+
+/* ---------- round 3 polish ---------- */
+@media (max-width:760px){
+  .look__pin{min-height:auto;padding-bottom:24px}
+  .shade{width:66vw}
+  .reels__head{padding-right:72px}
+}

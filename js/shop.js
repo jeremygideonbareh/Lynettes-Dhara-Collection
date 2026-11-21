@@ -157,6 +157,7 @@
     var list = CAT.filter(matches);
     var flipState = animate && window.Flip && !document.documentElement.classList.contains('reduced') ? Flip.getState(grid.children) : null;
     var keep = list.slice(0, state.shown);
+    var before = Array.prototype.slice.call(grid.children);
     grid.innerHTML = '';
     keep.forEach(function (p) { grid.appendChild(p.el); var m = p.el.querySelector('.pcard__meta'); if (m) m.style.opacity = ''; });
     if (!list.length) {
@@ -168,10 +169,15 @@
     more.parentNode.hidden = list.length <= state.shown;
     total.textContent = list.length + (list.length === 1 ? ' piece' : ' pieces');
     if (flipState) {
+      // entering cards keep their names hidden until they have landed, so text never overprints
+      var enteringMeta = keep.filter(function (p) { return before.indexOf(p.el) < 0; }).map(function (p) { return p.el.querySelector('.pcard__meta'); });
+      gsap.set(enteringMeta, { opacity: 0 });
       Flip.from(flipState, { duration: .8, ease: 'expo.out', stagger: .02, absolute: true, scale: true,
         onEnter: function (els) { return gsap.fromTo(els, { opacity: 0, y: 40, rotate: 2 }, { opacity: 1, y: 0, rotate: 0, duration: .8, stagger: .03, ease: 'expo.out' }); },
         onLeave: function (els) { return gsap.set(els, { opacity: 0 }); },
         onComplete: function () { window.ScrollTrigger && ScrollTrigger.refresh(); } });
+      // names fade in once the cards have landed (not tied to Flip's onEnter, which skips re-used cards)
+      gsap.to(enteringMeta, { opacity: 1, y: 0, duration: .45, delay: .5, stagger: .03, overwrite: 'auto' });
     } else if (window.ScrollTrigger) setTimeout(function () { ScrollTrigger.refresh(); }, 50);
     document.dispatchEvent(new CustomEvent('grid:render', { detail: { animate: !!animate } }));
   }
