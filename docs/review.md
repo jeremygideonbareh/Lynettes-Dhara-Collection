@@ -21,6 +21,8 @@ The main remaining limit is the source inventory. Of 53 photographed item refere
 
 ## Screenshots
 
+On the published GitHub Pages site, mobile Lighthouse measured **95/100 performance**, **100/100 accessibility**, a 2.2-second largest contentful paint and 0.006 cumulative layout shift. A separate live mobile test checked the 53-entry catalogue, a two-photo gallery, the exact enquiry link, touch swiping in the lookbook and the reduced-motion setting.
+
 | Desktop | Mobile |
 |---|---|
 | [Hero](review/desktop-hero.jpg) | [Hero](review/mobile-hero.jpg) |

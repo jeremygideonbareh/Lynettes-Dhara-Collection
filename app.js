@@ -42,7 +42,7 @@ for (const r of ranges) {
   const matched = pieces.some(p => p.range === r);
   const row = el('a','range-row'), img=el('img'); img.src='assets/ranges/'+({'Dep Thaiñ':'dep-thain','Full Khor':'full-khor'}[r]||r.toLowerCase())+'.webp';img.alt='';img.width=50;img.height=50;img.loading='lazy';
   row.append(img,el('span','range-name',r),el('span','range-action',matched?'Browse ↓':'Enquire ↗')); row.href = matched ? '#collection' : whatsapp('Hello Lynette, could you show me the available pieces in the ' + r + ' range?');
-  row.setAttribute('aria-label',matched ? 'View '+r+' pieces' : 'Enquire on WhatsApp about '+r);
+  row.setAttribute('aria-label',r+(matched ? ' Browse ↓ — view pieces' : ' Enquire ↗ — ask Lynette on WhatsApp'));
   if (matched) row.onclick = () => {filters.reset();filters.elements.range.value=r;shown=9;renderGrid();};
   one('#range-list').append(row);
 }
@@ -74,7 +74,9 @@ for (const dialog of [quick,wishlist]) {
   dialog.addEventListener('close',()=>{window.__lenis?.start();returnFocus?.focus?.({preventScroll:true});});
 }
 function setZoom(value) {
-  zoomed=value;one('#zoom-window').classList.toggle('zoomed',value);one('#quick-img').style.transformOrigin='50% 50%';one('#zoom').setAttribute('aria-pressed',String(value));one('#zoom').textContent=value?'Zoom out −':'Zoom in +';
+  zoomed=value;const viewport=one('#zoom-window');viewport.classList.toggle('zoomed',value);viewport.tabIndex=value?0:-1;
+  viewport.setAttribute('role','group');viewport.setAttribute('aria-label',value?'Zoomed fabric photograph. Use the arrow keys to pan.':'Fabric photograph');
+  one('#quick-img').style.transformOrigin='50% 50%';one('#zoom').setAttribute('aria-pressed',String(value));one('#zoom').textContent=value?'Zoom out −':'Zoom in +';
 }
 function gallery(i, transition=false) {
   const img=one('#quick-img'), previous=img.currentSrc||img.src;
@@ -87,7 +89,7 @@ function gallery(i, transition=false) {
 function openPiece(p, zoom=false) {
   active=p;one('#quick-title').textContent=p.name;one('#quick-range').textContent=p.range||'Lynette’s collection';one('#quick-price').textContent=priceText(p);
   const colour=one('#quick-colors');colour.replaceChildren();colour.hidden=!p.colors?.length;
-  if (p.colors?.length) {colour.append('Colour · ');p.colors.forEach((name,i)=>{const sw=el('i','swatch');if(CSS.supports('color',name)) {sw.style.backgroundColor=name;colour.append(sw);}colour.append(name+(i<p.colors.length-1?', ':''));});}
+  if (p.colors?.length) {colour.append('Colour · ');p.colors.forEach((name,i)=>{const sw=el('i','swatch');if(CSS.supports('color',name))sw.style.backgroundColor=name;else sw.style.backgroundImage='url('+p.images[0].small+')';sw.setAttribute('aria-hidden','true');colour.append(sw,name+(i<p.colors.length-1?', ':''));});}
   one('#quick-fabric').textContent=p.fabric?'Fabric · '+p.fabric:'';one('#quick-fabric').hidden=!p.fabric;
   one('#quick-wa').href=enquire(p);mobileWa.href=enquire(p);one('#quick-source').href=p.url;
   one('#quick-save').onclick=()=>toggle(p);syncSaved();gallery(0);openDialog(quick);if(zoom)setZoom(true);
@@ -97,6 +99,7 @@ one('#gallery-prev').onclick=()=>gallery(frame-1,true);one('#gallery-next').oncl
 one('#zoom-window').onpointermove=e=>{if(!zoomed)return;const box=e.currentTarget.getBoundingClientRect();one('#quick-img').style.transformOrigin=Math.max(0,Math.min(100,(e.clientX-box.left)/box.width*100))+'% '+Math.max(0,Math.min(100,(e.clientY-box.top)/box.height*100))+'%';};
 one('#zoom-window').onpointerdown=e=>{if(zoomed)e.currentTarget.setPointerCapture(e.pointerId);};
 one('#zoom-window').ondblclick=()=>setZoom(!zoomed);
+one('#zoom-window').onkeydown=e=>{if(!zoomed||!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const img=one('#quick-img'),[x,y]=img.style.transformOrigin.split(' ').map(parseFloat);const bound=n=>Math.max(0,Math.min(n,100));img.style.transformOrigin=bound(x+(e.key==='ArrowRight'?10:e.key==='ArrowLeft'?-10:0))+'% '+bound(y+(e.key==='ArrowDown'?10:e.key==='ArrowUp'?-10:0))+'%';};
 function renderWishlist(){
   const selected=pieces.filter(p=>selection.has(p.id)), container=one('#wishlist-items');container.replaceChildren();
   if(!selected.length)container.append(el('p','','Save a piece using the heart in the collection. Your favourites will appear here.'));
