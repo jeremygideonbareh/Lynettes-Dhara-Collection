@@ -570,7 +570,6 @@ html.reduced .look__pin{height:auto}
 .ranges{padding-top:calc(clamp(100px,14vh,170px) + 14vh)}
 .ranges::before{content:"";position:absolute;left:0;right:0;top:0;height:20vh;z-index:1;pointer-events:none;background:linear-gradient(#210e17,rgba(33,14,23,0))}
 /* menu */
-.menu__close{position:absolute;top:18px;right:16px;min-height:44px;padding:0 16px;border:1px solid var(--faint);border-radius:99px;font-size:.84rem}
 .menu .menu__wa{margin-top:24px;font-family:var(--sans);font-size:.95rem;align-self:flex-start}
 /* mobile WhatsApp pill */
 .fab{display:none}
@@ -594,3 +593,20 @@ html.reduced .look__pin{height:auto}
 .loader.is-quick .loader__name text{animation-duration:.7s;animation-delay:0s}
 .loader.is-quick .loader__loom i{animation-delay:0s!important;animation-duration:.5s}
 .loader.is-quick .loader__diamond{animation-delay:.3s}
+
+/* ---------- round 2 fixes ---------- */
+.order::after{height:12vh}
+.order{padding-bottom:calc(clamp(100px,14vh,160px) + 12vh)}
+.fab span{transition:opacity .3s}
+@media (max-width:760px){
+  .story__text{max-width:none}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+  .reels::after,.order::after,.ranges::before{height:10vh}
+  .reels{padding-bottom:calc(clamp(100px,14vh,160px) + 8vh)}
+  .order{padding-bottom:calc(clamp(100px,14vh,160px) + 10vh)}
+  .ranges{padding-top:calc(clamp(100px,14vh,170px) + 6vh)}
+  .look__scene{min-height:44svh}
+  .fab.mini{padding:0;width:52px;justify-content:center}
+  .fab.mini span{display:none}
+  .shade__sub{display:none}
+}

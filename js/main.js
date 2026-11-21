@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     heroHold: 0.9,      // hero pinned while the cloth unfurls and the name drifts apart
     storyHold: 1.5,     // manifesto pinned while its words light up
     trackLead: 0.22,    // pause before the colour rail starts moving
-    trackTail: 0.3,     // pause after the last card
+    trackTail: 0.15,    // pause after the last card
     trackSpeed: 1.15,   // scroll distance per px of rail travel
     pairsPer: 0.8,      // scroll per pair swap
     lookTurn: 2.0,      // lookbook pinned while the ring makes one full turn
@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var cards = $$('.lcard', ring), n = cards.length, step = 360 / n, label = $('#look-label');
     var r = 0, lw = 0;
     function layout() {
-      lw = window.innerWidth < 760 ? 158 : Math.min(210, window.innerWidth * .14);
+      lw = window.innerWidth < 760 ? 180 : Math.min(210, window.innerWidth * .14);
       r = (lw / 2) / Math.tan(Math.PI / n) + (window.innerWidth < 760 ? 10 : 30);
       ring.style.setProperty('--lw', lw + 'px'); painted = false;
       cards.forEach(function (c, i) { c.style.setProperty('--lw', lw + 'px'); c.style.transform = 'rotateY(' + (i * step) + 'deg) translateZ(' + r + 'px)'; });
@@ -538,12 +538,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ---------- after pins: tones, active links, thread, nav ----------
   function afterPins() {
-    var main = $('#main'), body = document.body, nav = $('#nav'), prog = $('.progress i'), fab = $('#fab');
+    var main = $('#main'), body = document.body, nav = $('#nav'), prog = $('.progress i'), fab = $('#fab'), fabSince = 0;
     // the thread steps out of the way where products fill the screen
     var busy = 0, svgEl = $('#thread');
-    ['.colours', '.reels', '.look', '#grid'].forEach(function (sel) {
+    // trigger on the pin-spacer for pinned sections, or the end fires as soon as the pin starts
+    ['.colours', '.pairs', '.reels', '.look', '#grid', '.prices'].forEach(function (sel) {
       var el = $(sel); if (!el) return;
-      ScrollTrigger.create({ trigger: el, start: 'top 85%', end: 'bottom 15%', onToggle: function (s) { busy += s.isActive ? 1 : -1; gsap.to(svgEl, { opacity: busy > 0 ? 0 : 1, duration: .5, overwrite: true }); } });
+      ScrollTrigger.create({ trigger: flow(el), start: 'top 85%', end: 'bottom 15%', onToggle: function (s) { busy += s.isActive ? 1 : -1; gsap.to(svgEl, { opacity: busy > 0 ? 0 : 1, duration: .5, overwrite: true }); } });
     });
     var toneEls = $$('[data-tone]');
     var tones = [];
@@ -613,7 +614,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (y > lastY + 6 && y > 400 && !navHidden) { navHidden = true; nav.classList.add('is-hidden'); html.classList.add('nav-up'); }
       else if (y < lastY - 6 && navHidden) { navHidden = false; nav.classList.remove('is-hidden'); html.classList.remove('nav-up'); }
       // mobile: a WhatsApp pill appears once the hero is behind you
-      if (fab) fab.classList.toggle('on', y > h * .8 && y < max - h * .9);
+      if (fab) {
+        var fabOn = y > h * .8 && y < max - h * .9;
+        if (fabOn && !fabSince) fabSince = Date.now(); if (!fabOn) fabSince = 0;
+        fab.classList.toggle('on', fabOn);
+        // after a moment it shrinks to an icon so it covers less of the page
+        fab.classList.toggle('mini', fabOn && Date.now() - fabSince > 2500);
+      }
       lastY = y;
     }
     ScrollTrigger.addEventListener('refresh', measure);

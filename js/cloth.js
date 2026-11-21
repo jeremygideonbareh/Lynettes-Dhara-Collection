@@ -171,8 +171,13 @@ function init() {
   document.addEventListener('pointerleave', () => { targetForce = 0; });
 
   let running = true, visible = true, raf = 0, last = performance.now(), t = 0;
+  const hold = () => !window.__loaderDone && document.getElementById('loader') && getComputedStyle(document.getElementById('loader')).display !== 'none';
+  let drawn = false;
   function frame(now) {
     raf = requestAnimationFrame(frame);
+    // while the loader covers the page, draw once and then wait (keeps the loader smooth)
+    if (drawn && hold()) { last = now; return; }
+    drawn = true;
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     t += dt;
     force += (targetForce - force) * 0.06;

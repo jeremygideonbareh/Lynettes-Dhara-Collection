@@ -50,7 +50,7 @@
   var cnt=L.querySelector('.loader__count'), bar=L.querySelector('.loader__thread i'), nd=L.querySelector('.loader__thread b');
   var t0=performance.now(), shown=0, got={fonts:0,load:0,cloth:0}, finished=false, repeat=false;
   try{repeat=!!sessionStorage.getItem('ldc-intro')}catch(e){}
-  var MIN=repeat?800:2000; if(repeat)L.classList.add('is-quick'); /* reloads in the same visit get a short version */
+  var MIN=repeat?800:2000; if(repeat){L.classList.add('is-quick');got.cloth=1} /* reloads in the same visit get a short version */
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){got.fonts=1});else got.fonts=1;
   addEventListener('load',function(){got.load=1});
   document.addEventListener('cloth:ready',function(){got.cloth=1});
@@ -60,10 +60,12 @@
     cnt.textContent='100';bar.style.transform='scaleX(1)';nd.style.left='100%';L.classList.add('is-woven');
     document.dispatchEvent(new Event('loader:done'));
     setTimeout(function(){if(L.style.display!=='none'){L.style.transition='opacity .6s';L.style.opacity=0;setTimeout(function(){L.style.display='none'},650)}},3500)};
+  var last=t0;
   function tick(now){
+    var dt=Math.min(100,now-last);last=now;
     var real=(got.fonts+got.load+got.cloth)/3, time=Math.min(1,(now-t0)/MIN);
     var target=Math.min(time,.18+.82*real);
-    shown+=(target-shown)*.09; if(target>=1&&shown>.995)shown=1;
+    shown+=(target-shown)*(1-Math.pow(.91,dt/16.7)); /* time-based, same speed on slow GPUs */ if(target>=1&&shown>.995)shown=1;
     cnt.textContent=String(Math.round(shown*100)).padStart(2,'0');
     bar.style.transform='scaleX('+shown+')'; nd.style.left=(shown*100)+'%';
     if(shown>=1){L.classList.add('is-woven');setTimeout(window.__loaderFinish,250);return}
@@ -97,7 +99,6 @@
   </div>
 </header>
 <div class="menu" id="menu" hidden>
-  <button type="button" class="menu__close" id="menu-close" aria-label="Close menu">Close ×</button>
   <a href="#story">Story</a><a href="#colours">Colours</a><a href="#lookbook">Lookbook</a><a href="#collection">Collection</a><a href="#order">How to order</a><a href="#visit">Visit</a>
   <a class="btn btn--gold menu__wa" href="https://wa.me/917005366288?text=Hello%20Lynette%2C%20I%E2%80%99d%20like%20to%20enquire%20about%20your%20Khasi%20wear." target="_blank" rel="noopener"><span>Message Lynette on WhatsApp</span></a>
 </div>

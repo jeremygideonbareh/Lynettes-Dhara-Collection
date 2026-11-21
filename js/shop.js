@@ -108,8 +108,9 @@
 
   /* ---------- lookbook ---------- */
   var ring = $('#look-ring');
-  var LOOK = ['DfzonKjmInI-10', 'Dfpt_6_Evtj-03', 'DfUHpwdoBqU-01', 'DfzonKjmInI-01', 'Dfpt_6_Evtj-09', 'DfpJqH9GMYd-04', 'DfzonKjmInI-08', 'Dfpt_6_Evtj-15',
-    'DfE3EgpmPrS-02', 'Df2H1rtD5Wd-02-right', 'Dfpt_6_Evtj-04', 'DfzonKjmInI-06', 'DfpJqH9GMYd-01', 'Dfpt_6_Evtj-12', 'Df2H1rtD5Wd-01-left', 'DfzonKjmInI-02'];
+  // opens on pieces the earlier chapters didn't lead with
+  var LOOK = ['DfpJqH9GMYd-04', 'DfUHpwdoBqU-01', 'DfhS11kmEnP-03', 'DfzonKjmInI-05', 'Dfpt_6_Evtj-07', 'DfKyiHCPVgK-01', 'DfzonKjmInI-03', 'Dfpt_6_Evtj-19',
+    'DfE3EgpmPrS-02', 'DfRfTn1oIFv-01', 'Dfpt_6_Evtj-13', 'DfzonKjmInI-06', 'DfpJqH9GMYd-02', 'Dfpt_6_Evtj-16', 'DfhS11kmEnP-01', 'DfzonKjmInI-09'];
   if (ring) {
     ring.innerHTML = LOOK.map(function (id, i) {
       var p = byId[id];
@@ -169,7 +170,7 @@
     if (flipState) {
       Flip.from(flipState, { duration: .8, ease: 'expo.out', stagger: .02, absolute: true, scale: true,
         onEnter: function (els) { return gsap.fromTo(els, { opacity: 0, y: 40, rotate: 2 }, { opacity: 1, y: 0, rotate: 0, duration: .8, stagger: .03, ease: 'expo.out' }); },
-        onLeave: function (els) { gsap.set(els.map(function (e) { return e.querySelector('.pcard__meta'); }).filter(Boolean), { opacity: 0 }); return gsap.to(els, { opacity: 0, scale: .9, duration: .2 }); },
+        onLeave: function (els) { return gsap.set(els, { opacity: 0 }); },
         onComplete: function () { window.ScrollTrigger && ScrollTrigger.refresh(); } });
     } else if (window.ScrollTrigger) setTimeout(function () { ScrollTrigger.refresh(); }, 50);
     document.dispatchEvent(new CustomEvent('grid:render', { detail: { animate: !!animate } }));
