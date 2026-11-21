@@ -113,7 +113,7 @@
   if (ring) {
     ring.innerHTML = LOOK.map(function (id, i) {
       var p = byId[id];
-      return '<button type="button" class="lcard" data-id="' + id + '" data-i="' + i + '" style="--shade:' + p.swatch + '" aria-label="' + esc(p.name) + ', open details" data-cursor="needle">' + img(p, 0) + '</button>';
+      return '<button type="button" class="lcard" data-id="' + id + '" data-i="' + i + '" style="--shade:' + p.swatch + '" aria-label="' + esc(p.name) + ', open details" data-cursor="needle">' + img(p, 0, '', true) + '</button>';
     }).join('');
   }
 
@@ -157,7 +157,7 @@
     var flipState = animate && window.Flip && !document.documentElement.classList.contains('reduced') ? Flip.getState(grid.children) : null;
     var keep = list.slice(0, state.shown);
     grid.innerHTML = '';
-    keep.forEach(function (p) { grid.appendChild(p.el); });
+    keep.forEach(function (p) { grid.appendChild(p.el); var m = p.el.querySelector('.pcard__meta'); if (m) m.style.opacity = ''; });
     if (!list.length) {
       var empty = document.createElement('p');
       empty.className = 'grid__empty';
@@ -169,7 +169,7 @@
     if (flipState) {
       Flip.from(flipState, { duration: .8, ease: 'expo.out', stagger: .02, absolute: true, scale: true,
         onEnter: function (els) { return gsap.fromTo(els, { opacity: 0, y: 40, rotate: 2 }, { opacity: 1, y: 0, rotate: 0, duration: .8, stagger: .03, ease: 'expo.out' }); },
-        onLeave: function (els) { return gsap.to(els, { opacity: 0, scale: .9, duration: .4 }); },
+        onLeave: function (els) { gsap.set(els.map(function (e) { return e.querySelector('.pcard__meta'); }).filter(Boolean), { opacity: 0 }); return gsap.to(els, { opacity: 0, scale: .9, duration: .2 }); },
         onComplete: function () { window.ScrollTrigger && ScrollTrigger.refresh(); } });
     } else if (window.ScrollTrigger) setTimeout(function () { ScrollTrigger.refresh(); }, 50);
     document.dispatchEvent(new CustomEvent('grid:render', { detail: { animate: !!animate } }));
@@ -286,7 +286,8 @@
     menuBtn.setAttribute('aria-expanded', String(open)); menu.hidden = !open; menuBtn.textContent = open ? 'Close' : 'Menu';
     if (window.__lenis) open ? window.__lenis.stop() : window.__lenis.start();
   });
-  menu.addEventListener('click', function (e) { if (e.target.closest('a')) menuBtn.click(); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a[href^="#"]') || e.target.closest('#menu-close')) menuBtn.click(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) menuBtn.click(); });
 
   window.SHOP = { byId: byId, catalog: CAT, openQuick: openQuick, look: LOOK, toast: toast };
 })();

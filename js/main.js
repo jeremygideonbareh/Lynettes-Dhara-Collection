@@ -145,7 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
       .from('.hero__kicker .kicker__line', { scaleX: 0, duration: 1.2 }, .4)
       .to('.hero [data-reveal]', { opacity: 1, y: 0, duration: 1.1, stagger: .1 }, .7)
       .from('.hero__scroll, .hero__caption', { opacity: 0, duration: 1 }, 1)
-      .from('.nav', { yPercent: -100, opacity: 0, duration: 1 }, .5);
+      // animate the nav's children, never the bar itself (the bar owns the hide-on-scroll transform)
+      .from('.nav > *', { yPercent: -120, autoAlpha: 0, stagger: .06, duration: 1, clearProps: 'transform,opacity,visibility' }, .5);
     var P = window.__cloth;
     if (P) { tl.fromTo(P, { reveal: 0 }, { reveal: 1, duration: 2.6, ease: 'power2.inOut' }, 0); tl.fromTo(P, { wind: 2.2 }, { wind: 1, duration: 3.2, ease: 'power2.out' }, 0.4); }
     else gsap.from('.hero__poster', { clipPath: 'inset(0 0 100% 0)', duration: 1.6, ease: 'expo.inOut' });
@@ -228,39 +229,54 @@ document.addEventListener('DOMContentLoaded', function () {
       var dist = function () { return Math.max(0, rail.scrollWidth - window.innerWidth); };
       var lead = SCROLL_MAP.trackLead, tail = SCROLL_MAP.trackTail;
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      tl.to({}, { duration: lead })
-        .to(rail, { x: function () { return -dist(); }, duration: 1 })
-        .to(head, { x: -120, opacity: 0, duration: .25 }, lead)
+      tl.to({}, { duration: lead + .06 });
+      // the heading clears out completely before the rail starts to travel (it stays on phones, where it has its own row)
+      if (!touch) tl.to(head, { x: -140, opacity: 0, duration: lead * .6 }, lead * .3);
+      tl.to(rail, { x: function () { return -dist(); }, duration: 1 }, lead + .06)
         .to({}, { duration: tail });
-      var active = false, current = -1;
-      ScrollTrigger.create({
+      var span = 1 + lead + .06 + tail;
+      var active = false, current = -1, n = cards.length;
+      function setCurrent(bi) {
+        if (bi === current) return;
+        current = bi;
+        idx.textContent = String(bi + 1).padStart(2, '0');
+        gsap.to(html, { '--glow': cards[bi].style.getPropertyValue('--shade'), duration: .9, overwrite: true });
+      }
+      var st = ScrollTrigger.create({
         trigger: section, pin: true, start: 'top top', scrub: 1, animation: tl, invalidateOnRefresh: true, anticipatePin: 1,
         end: function () { return '+=' + (dist() * SCROLL_MAP.trackSpeed + vh() * (lead + tail)); },
         onToggle: function (s) { active = s.isActive; gsap.to(html, { '--glow-o': s.isActive ? .32 : 0, duration: .8 }); },
         onUpdate: function (s) {
-          var p = gsap.utils.clamp(0, 1, (s.progress * (1 + lead + tail) - lead));
+          var p = gsap.utils.clamp(0, 1, s.progress * span - lead - .06);
           bar.style.transform = 'scaleX(' + p + ')';
+          setCurrent(Math.round(p * (n - 1)));
         }
       });
       gsap.from(cards.slice(0, 4), { y: 120, rotateY: -30, opacity: 0, duration: 1.4, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: section, start: 'top 65%' } });
-      var cx = window.innerWidth / 2;
-      addEventListener('resize', function () { cx = window.innerWidth / 2; });
+      // card centres cached on refresh (no layout reads per frame)
+      var cx = window.innerWidth / 2, centres = [], lastX = null, turn = touch ? 8 : 16;
+      function measure() { cx = window.innerWidth / 2; centres = cards.map(function (c) { return c.offsetLeft + c.offsetWidth / 2; }); lastX = null; }
+      measure();
+      ScrollTrigger.addEventListener('refresh', measure);
       gsap.ticker.add(function () {
         if (!active) return;
-        var best = 1e9, bi = 0;
-        for (var i = 0; i < cards.length; i++) {
-          var r = cards[i].getBoundingClientRect();
-          var c = (r.left + r.width / 2 - cx) / cx;
-          if (Math.abs(c) < best) { best = Math.abs(c); bi = i; }
+        var x = gsap.getProperty(rail, 'x');
+        if (x === lastX) return; lastX = x;
+        for (var i = 0; i < n; i++) {
+          var c = (centres[i] + x - cx) / cx;
           if (c < -1.6 || c > 1.6) continue;
-          cards[i].style.transform = 'perspective(1000px) translateY(' + (c * c * 46).toFixed(1) + 'px) rotateY(' + (c * -16).toFixed(2) + 'deg) scale(' + (1 - Math.min(Math.abs(c), 1) * .07).toFixed(3) + ')';
+          cards[i].style.transform = 'perspective(1000px) translateY(' + (c * c * 46).toFixed(1) + 'px) rotateY(' + (c * -turn).toFixed(2) + 'deg) scale(' + (1 - Math.min(Math.abs(c), 1) * .07).toFixed(3) + ')';
           imgs[i].style.transform = 'translateX(' + (c * -9).toFixed(2) + '%)';
         }
-        if (bi !== current) {
-          current = bi;
-          idx.textContent = String(bi + 1).padStart(2, '0');
-          gsap.to(html, { '--glow': cards[bi].style.getPropertyValue('--shade'), duration: .9, overwrite: true });
-        }
+      });
+      // keyboard: focusing a shade scrolls the page to the point where that card is centred
+      $('.colours__pin').addEventListener('scroll', function () { this.scrollLeft = 0; this.scrollTop = 0; });
+      rail.addEventListener('focusin', function (e) {
+        var card = e.target.closest('.shade'); if (!card) return;
+        var i = cards.indexOf(card); if (i < 0) i = n - 1;
+        var p = (lead + .06 + i / (n - 1)) / span;
+        var y = st.start + (st.end - st.start) * p;
+        if (lenis) lenis.scrollTo(y, { duration: .8 }); else window.scrollTo(0, y);
       });
     })();
 
@@ -270,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (touch) {
         pairs.forEach(function (p) {
           var l = p.querySelector('.pair__half--l'), r = p.querySelector('.pair__half--r');
-          var tl = gsap.timeline({ scrollTrigger: { trigger: p, start: 'top 85%', end: 'top 30%', scrub: .6 } });
+          var tl = gsap.timeline({ scrollTrigger: { trigger: p, start: 'top 95%', end: 'top 62%', scrub: .5 } });
           tl.fromTo(l, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none' }, 0)
             .fromTo(r, { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', ease: 'none' }, .1)
             .fromTo(p.querySelectorAll('img'), { scale: 1.3 }, { scale: 1, ease: 'none' }, 0);
@@ -353,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $$('.rrow a').forEach(function (a) {
           a.addEventListener('mouseenter', function () { pimg.src = a.dataset.img; gsap.to(pv, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: 'expo.out' }); });
           a.addEventListener('mouseleave', function () { gsap.to(pv, { opacity: 0, scale: .6, rotate: -8, duration: .4 }); });
-          a.addEventListener('mousemove', function (e) { qx(e.clientX - 110); qy(e.clientY - 110); });
+          a.addEventListener('mousemove', function (e) { qx(e.clientX + 40); qy(e.clientY - 75); });
         });
       }
     })();
@@ -462,9 +478,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var cards = $$('.lcard', ring), n = cards.length, step = 360 / n, label = $('#look-label');
     var r = 0, lw = 0;
     function layout() {
-      lw = window.innerWidth < 760 ? 132 : Math.min(240, window.innerWidth * .16);
-      r = (lw / 2) / Math.tan(Math.PI / n) + (window.innerWidth < 760 ? 14 : 34);
-      ring.style.setProperty('--lw', lw + 'px');
+      lw = window.innerWidth < 760 ? 158 : Math.min(210, window.innerWidth * .14);
+      r = (lw / 2) / Math.tan(Math.PI / n) + (window.innerWidth < 760 ? 10 : 30);
+      ring.style.setProperty('--lw', lw + 'px'); painted = false;
       cards.forEach(function (c, i) { c.style.setProperty('--lw', lw + 'px'); c.style.transform = 'rotateY(' + (i * step) + 'deg) translateZ(' + r + 'px)'; });
     }
     layout(); addEventListener('resize', layout);
@@ -494,10 +510,13 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       gsap.from(ring, { scale: .55, rotateX: 50, opacity: 0, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.look', start: 'top 60%' } });
     }
-    var tilt = window.innerWidth < 760 ? -4 : -8, push = -r * .55;
+    var tilt = window.innerWidth < 760 ? -4 : -8, painted = false;
     function tick() {
-      if (!dragging) { drag += vel; vel *= .94; if (touch && animated) drag -= .05; }
+      if (!dragging) { drag += vel; vel *= .94; if (Math.abs(vel) < .01) vel = 0; }
       var target = scrollRot + drag;
+      // idle: nothing moved since the last frame, so skip the style writes
+      if (painted && !dragging && vel === 0 && Math.abs(target - cur) < .01) return;
+      painted = true;
       cur += (target - cur) * (reduced ? 1 : .09);
       ring.style.transform = 'translateZ(' + (-r * .55) + 'px) rotateX(' + tilt + 'deg) rotateY(' + cur.toFixed(2) + 'deg)';
       var best = 1e9, bi = 0;
@@ -519,7 +538,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ---------- after pins: tones, active links, thread, nav ----------
   function afterPins() {
-    var main = $('#main'), body = document.body, nav = $('#nav'), prog = $('.progress i');
+    var main = $('#main'), body = document.body, nav = $('#nav'), prog = $('.progress i'), fab = $('#fab');
+    // the thread steps out of the way where products fill the screen
+    var busy = 0, svgEl = $('#thread');
+    ['.colours', '.reels', '.look', '#grid'].forEach(function (sel) {
+      var el = $(sel); if (!el) return;
+      ScrollTrigger.create({ trigger: el, start: 'top 85%', end: 'bottom 15%', onToggle: function (s) { busy += s.isActive ? 1 : -1; gsap.to(svgEl, { opacity: busy > 0 ? 0 : 1, duration: .5, overwrite: true }); } });
+    });
     var toneEls = $$('[data-tone]');
     var tones = [];
     function flow(el) { return el.parentElement && el.parentElement.classList.contains('pin-spacer') ? el.parentElement : el; }
@@ -585,8 +610,10 @@ document.addEventListener('DOMContentLoaded', function () {
       var max = document.documentElement.scrollHeight - h;
       prog.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
       nav.classList.toggle('is-solid', y > 60);
-      if (y > lastY + 6 && y > 400 && !navHidden) { navHidden = true; nav.classList.add('is-hidden'); }
-      else if (y < lastY - 6 && navHidden) { navHidden = false; nav.classList.remove('is-hidden'); }
+      if (y > lastY + 6 && y > 400 && !navHidden) { navHidden = true; nav.classList.add('is-hidden'); html.classList.add('nav-up'); }
+      else if (y < lastY - 6 && navHidden) { navHidden = false; nav.classList.remove('is-hidden'); html.classList.remove('nav-up'); }
+      // mobile: a WhatsApp pill appears once the hero is behind you
+      if (fab) fab.classList.toggle('on', y > h * .8 && y < max - h * .9);
       lastY = y;
     }
     ScrollTrigger.addEventListener('refresh', measure);
@@ -605,7 +632,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var c = $('.cursor'), ring = $('.cursor__ring'), dot = $('.cursor__dot'), label = $('.cursor__label');
     var rx = gsap.quickTo(ring, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .5, ease: 'power3' });
     var dx = gsap.quickTo(dot, 'x', { duration: .12 }), dy = gsap.quickTo(dot, 'y', { duration: .12 });
-    addEventListener('pointermove', function (e) { rx(e.clientX); ry(e.clientY); dx(e.clientX); dy(e.clientY); }, { passive: true });
+    c.classList.add('is-hidden'); // until the first real mouse move, so it never sits at (0,0)
+    addEventListener('pointermove', function (e) { c.classList.remove('is-hidden'); rx(e.clientX); ry(e.clientY); dx(e.clientX); dy(e.clientY); }, { passive: true });
     document.addEventListener('mouseover', function (e) {
       var t = e.target.closest('[data-cursor], a, button');
       c.classList.remove('is-label', 'is-needle');

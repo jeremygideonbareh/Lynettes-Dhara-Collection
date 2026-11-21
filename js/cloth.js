@@ -20,7 +20,7 @@ function init() {
   const small = innerWidth < 760;
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: !touch, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: !touch });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: !touch, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: false });
   } catch (e) { delete window.__cloth; document.dispatchEvent(new Event('cloth:none')); return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, touch ? 1.25 : 1.75));
   renderer.setClearColor(0x000000, 0);
@@ -146,7 +146,7 @@ function init() {
     camera.updateProjectionMatrix();
     const mobile = w < 760;
     // desktop: hang right of the headline; phones: high and centred behind the type
-    group.position.set(mobile ? 0.15 : 1.25, mobile ? 1.1 : 0.18, 0);
+    group.position.set(mobile ? 0.15 : 1.25, mobile ? 0.78 : 0.18, 0);
     const s = mobile ? Math.min(1.02, (w / h) * 2.2) : 1;
     group.scale.setScalar(s);
     camera.position.z = mobile ? 8.6 : 7.2;
