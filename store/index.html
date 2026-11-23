@@ -4,167 +4,132 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lynette’s Dhara Collection · Shop Khasi wear</title>
-<meta name="description" content="Shop Khasi wear from Lynette’s Dhara Collection, a boutique at home in Shillong. Browse by craft and colour, add pieces to your bag and order on WhatsApp.">
-<meta name="theme-color" content="#0c0a0a">
+<meta name="description" content="Shop Khasi wear from Lynette’s Dhara Collection, a boutique at home in Shillong. Choose your craft, find your colour, add pieces to your bag and order on WhatsApp.">
+<meta name="theme-color" content="#0b0909">
 <meta name="robots" content="noindex">
 <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
 <script>document.documentElement.classList.replace('no-js','js');if(matchMedia('(pointer: coarse)').matches)document.documentElement.classList.add('touch');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="hero-purple.webp" as="image" media="(min-width: 761px)">
+<link rel="preload" href="hero-purple-small.webp" as="image" media="(max-width: 760px)">
 <link rel="stylesheet" href="store.css">
 </head>
 <body>
 <a class="skip" href="#shop">Skip to the shop</a>
 
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="intro__panel"></div>
-  <div class="intro__in">
-    <p class="intro__name"><span class="intro__a">Lynette’s</span> <em class="intro__b">Dhara Collection</em></p>
-    <div class="intro__bar"><i></i></div>
-    <p class="intro__meta"><span>Boutique at home · Shillong</span><b class="intro__count">00</b></p>
-  </div>
-</div>
-<div class="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
-<div class="progress" aria-hidden="true"><i></i></div>
-
-<header class="nav" id="nav">
-  <div class="nav__in">
+<header class="site-head" id="head">
+  <p class="announce">Boutique at home <span>·</span> Mawlai Kynton Massar, Shillong <span>·</span> Order on WhatsApp +91 70053 66288</p>
+  <div class="masthead">
+    <button type="button" class="head-menu" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
     <a class="logo" href="#top" aria-label="Lynette’s Dhara Collection, home">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1"/><text x="16" y="21" text-anchor="middle" font-family="Cormorant, serif" font-size="15" fill="currentColor">L</text></svg>
-      <span>Lynette’s Dhara Collection</span>
+      <span class="logo__mark" aria-hidden="true">L</span>
+      <span class="logo__word">Lynette Dhara Collection</span>
     </a>
-    <nav class="nav__links" aria-label="Main">
-      <a href="#crafts">Crafts</a><a href="#new">Just in</a><a href="#colour">Colours</a><a href="#shop">Shop</a><a href="#about">About</a><a href="#visit">Visit</a>
-    </nav>
-    <div class="nav__end">
-      <a class="nav__ig" href="https://www.instagram.com/lynette_dhara_collection/" target="_blank" rel="noopener" aria-label="Instagram">
+    <div class="head-icons">
+      <a class="head-ig" href="https://www.instagram.com/lynette_dhara_collection/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
       </a>
-      <button type="button" class="nav__bag" id="open-bag" aria-label="Open your bag">
+      <button type="button" class="head-bag" id="open-bag" aria-label="Open your bag">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        <span>Bag</span><b id="bag-count">0</b>
+        <b id="bag-count">0</b>
       </button>
-      <button type="button" class="nav__menu" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
     </div>
   </div>
+  <nav class="nav" aria-label="Main">
+    <a href="#top">Home</a><a href="#crafts">Crafts</a><a href="#featured">Featured</a><a href="#colour">Find your colour</a><a href="#shop">Shop all</a><a href="#about">How to order</a><a href="#visit">Visit</a>
+  </nav>
 </header>
 <div class="menu" id="menu" hidden>
-  <a href="#crafts">Crafts</a><a href="#new">Just in</a><a href="#colour">Find your colour</a><a href="#shop">Shop all</a><a href="#about">About</a><a href="#visit">Visit &amp; contact</a>
+  <a href="#crafts">Crafts</a><a href="#featured">Featured</a><a href="#colour">Find your colour</a><a href="#shop">Shop all</a><a href="#about">How to order</a><a href="#visit">Visit</a>
 </div>
 
 <main>
 <!-- HERO -->
 <section class="hero" id="top" aria-labelledby="hero-title">
-  <div class="hero__media" aria-hidden="true"><img src="../assets/art/cloth.webp" srcset="../assets/art/cloth-small.webp 1024w, ../assets/art/cloth.webp 2048w" sizes="100vw" alt="" fetchpriority="high"><canvas id="hero-gl"></canvas></div>
+  <picture class="hero__media" aria-hidden="true">
+    <source media="(max-width: 760px)" srcset="hero-purple-small.webp">
+    <img src="hero-purple.webp" alt="" fetchpriority="high">
+  </picture>
   <div class="hero__in">
-    <p class="eyebrow" data-rise>Boutique at home <span>·</span> Shillong</p>
-    <h1 id="hero-title" class="hero__title" data-words>Made to be worn. <em>Meant to be remembered.</em></h1>
-    <p class="hero__text" data-rise>Lynette’s Dhara Collection is a boutique at home in Mawlai Kynton Massar, Shillong, retailing traditional Khasi wear: Dhara, Khor, Muka and Contrast.</p>
-    <div class="hero__cta" data-rise>
-      <a class="btn btn--gold magnetic" href="#shop" data-cursor="Shop">Shop the collection</a>
-      <a class="btn btn--ghost magnetic" href="#crafts">Choose your craft</a>
+    <p class="eyebrow" data-fade>Boutique at home <span>·</span> Shillong</p>
+    <h1 id="hero-title" class="hero__title" data-fade>Made to be worn.<em>Meant to be remembered.</em></h1>
+    <p class="hero__text" data-fade>Lynette’s Dhara Collection is a boutique at home in Shillong, retailing traditional Khasi wear: Dhara, Khor, Muka and Contrast.</p>
+    <div class="hero__cta" data-fade>
+      <a class="btn btn--gold" href="#shop">Shop the collection</a>
+      <a class="btn btn--line" href="#crafts">Choose your craft</a>
     </div>
   </div>
-  <p class="hero__note" aria-hidden="true">Fabric shown: crimson with woven gold borders, from the boutique’s New Arrivals</p>
 </section>
 
-<div class="ticker" aria-hidden="true"><div class="ticker__track"><span>Dhara</span><i>✦</i><span>Khor</span><i>✦</i><span>Muka</span><i>✦</i><span>Contrast</span><i>✦</i><span>Ryndia</span><i>✦</i><span>Half Khor</span><i>✦</i></div></div>
-
-<!-- CRAFTS -->
-<section class="crafts section" id="crafts" aria-labelledby="crafts-title">
-  <div class="head">
-    <h2 id="crafts-title" class="title" data-words>Choose your <em>craft.</em></h2>
-    <a class="link" href="#shop">View all pieces <span aria-hidden="true">→</span></a>
+<!-- CHOOSE YOUR CRAFT -->
+<section class="sec" id="crafts" aria-labelledby="crafts-title">
+  <div class="sec__head" data-fade>
+    <h2 id="crafts-title" class="title">Choose your <em>craft.</em></h2>
+    <a class="viewall" href="#shop">View all <span aria-hidden="true">→</span></a>
   </div>
-  <div class="crafts__row" id="crafts-row"></div>
+  <div class="crafts" id="crafts-grid"></div>
 </section>
 
-<!-- JUST IN -->
-<section class="new section" id="new" aria-labelledby="new-title">
-  <div class="head">
-    <h2 id="new-title" class="title" data-words>Just <em>in.</em></h2>
-    <p class="head__note">From the boutique’s New Arrivals, posted 16 November.</p>
+<!-- FEATURED -->
+<section class="sec" id="featured" aria-labelledby="featured-title">
+  <div class="sec__head" data-fade>
+    <h2 id="featured-title" class="title">My featured <em>products.</em></h2>
+    <a class="viewall" href="#shop">View all <span aria-hidden="true">→</span></a>
   </div>
-  <div class="new__row" id="new-row"></div>
+  <div class="featured" id="featured-row"></div>
 </section>
 
-<!-- RANGE NAMES: two rows sliding in opposite directions -->
-<section class="words" aria-label="The ranges: Dhara, Khor, Muka, Contrast, Ryndia, Half Khor">
-  <p class="words__row words__row--a" aria-hidden="true"><span>Dhara</span><i>✦</i><em>Khor</em><i>✦</i><span>Muka</span><i>✦</i><em>Contrast</em><i>✦</i><span>Dhara</span><i>✦</i><em>Khor</em></p>
-  <p class="words__row words__row--b" aria-hidden="true"><em>Ryndia</em><i>✦</i><span>Half Khor</span><i>✦</i><em>Premium</em><i>✦</i><span>Mukhla</span><i>✦</i><em>Mukhli</em><i>✦</i><span>Dep Thaiñ</span></p>
-</section>
-
-<!-- FIND YOUR COLOUR + SHOP -->
-<section class="shop section" id="colour" aria-labelledby="colour-title">
-  <div class="head">
-    <h2 id="colour-title" class="title" data-words>Find your <em>colour.</em></h2>
-    <p class="head__note" id="shop-count" aria-live="polite"></p>
+<!-- FIND YOUR COLOUR + PRODUCTS -->
+<section class="sec" id="colour" aria-labelledby="colour-title">
+  <div class="sec__head" data-fade>
+    <h2 id="colour-title" class="title">Find your <em>colour.</em></h2>
+    <p class="count" id="shop-count" aria-live="polite"></p>
   </div>
-  <div class="colours" id="colour-list" role="radiogroup" aria-label="Colour"></div>
-  <div class="types" id="type-list" role="radiogroup" aria-label="Craft"></div>
+  <div class="colours" id="colour-list" role="radiogroup" aria-label="Colour" data-fade></div>
+  <div class="pills" id="type-list" role="radiogroup" aria-label="Craft" data-fade></div>
   <div class="grid" id="shop" aria-label="Products"></div>
-  <div class="more"><button type="button" class="btn btn--ghost" id="more">Show more</button></div>
+  <div class="more"><button type="button" class="btn btn--line" id="more">Show more</button></div>
 </section>
 
-<!-- ABOUT -->
-<section class="about section" id="about" aria-labelledby="about-title">
-  <div class="about__media" aria-hidden="true">
-    <img src="../assets/products/DfpJqH9GMYd-04.webp" alt="" loading="lazy">
-    <img src="../assets/products/DfE3EgpmPrS-02.webp" alt="" loading="lazy">
+<!-- HOW TO ORDER -->
+<section class="sec about" id="about" aria-labelledby="about-title">
+  <div class="about__media" data-fade>
+    <img src="../assets/products/DfpJqH9GMYd-04.webp" alt="Champagne Half Khor with maroon motifs." loading="lazy">
   </div>
   <div class="about__copy">
-    <p class="eyebrow">The boutique</p>
-    <h2 id="about-title" class="title" data-words>A boutique <em>at home.</em></h2>
-    <p>Every piece here is photographed by the boutique and shared on its Instagram. Message Lynette on WhatsApp to order, then arrange pickup from Mawlai Kynton Massar or delivery directly with her.</p>
-    <ol class="steps">
-      <li><b>01</b><span>Add the pieces you love to your bag.</span></li>
-      <li><b>02</b><span>Send your bag to Lynette on WhatsApp in one tap.</span></li>
-      <li><b>03</b><span>She confirms price, size and availability, then pickup or delivery.</span></li>
-    </ol>
-    <p class="policy"><strong>No returns or exchanges.</strong> Please confirm colour, size and details before ordering.</p>
+    <p class="eyebrow" data-fade>How to order</p>
+    <h2 id="about-title" class="title" data-fade>A boutique <em>at home.</em></h2>
+    <p data-fade>Every piece here is photographed by the boutique and shared on its Instagram. Add what you love to your bag and send it to Lynette on WhatsApp. She confirms price, size and availability, then pickup from Mawlai Kynton Massar or delivery.</p>
+    <p class="policy" data-fade><strong>No returns or exchanges.</strong> Please confirm colour, size and details before ordering.</p>
   </div>
 </section>
 </main>
 
-<footer class="footer" id="visit">
-  <div class="footer__grid">
-    <div>
-      <p class="footer__logo">Lynette’s <em>Dhara Collection</em></p>
-      <p class="footer__text">Khasi wear from a boutique at home in Shillong.</p>
-    </div>
-    <div>
-      <h3>Visit</h3>
-      <p>Mawlai Kynton Massar<br>Shillong, Meghalaya</p>
-      <a href="https://www.google.com/maps/search/?api=1&amp;query=Mawlai%20Kynton%20Massar%2C%20Shillong%2C%20Meghalaya" target="_blank" rel="noopener">Open in Maps ↗</a>
-    </div>
-    <div>
-      <h3>Contact</h3>
-      <a href="https://wa.me/917005366288?text=Hello%20Lynette%2C%20I%E2%80%99d%20like%20to%20enquire%20about%20your%20Khasi%20wear." target="_blank" rel="noopener">WhatsApp +91 70053 66288</a>
-      <a href="tel:+917005366288">Call +91 70053 66288</a>
-      <a href="https://www.instagram.com/lynette_dhara_collection/" target="_blank" rel="noopener">@lynette_dhara_collection</a>
-    </div>
+<footer class="foot" id="visit">
+  <div class="foot__grid">
+    <div><p class="foot__logo"><span class="logo__mark" aria-hidden="true">L</span> Lynette Dhara Collection</p><p>Khasi wear from a boutique at home in Shillong.</p></div>
+    <div><h3>Visit</h3><p>Mawlai Kynton Massar<br>Shillong, Meghalaya</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Mawlai%20Kynton%20Massar%2C%20Shillong%2C%20Meghalaya" target="_blank" rel="noopener">Open in Maps ↗</a></div>
+    <div><h3>Contact</h3><a href="https://wa.me/917005366288?text=Hello%20Lynette%2C%20I%E2%80%99d%20like%20to%20enquire%20about%20your%20Khasi%20wear." target="_blank" rel="noopener">WhatsApp +91 70053 66288</a><a href="tel:+917005366288">Call +91 70053 66288</a><a href="https://www.instagram.com/lynette_dhara_collection/" target="_blank" rel="noopener">@lynette_dhara_collection</a></div>
   </div>
-  <p class="footer__word" aria-hidden="true">Lynette’s</p>
-  <div class="footer__bar"><span>© Lynette’s Dhara Collection · Website concept</span><span>All photographs by the boutique, via Instagram</span><a href="#top">Back to top ↑</a></div>
+  <div class="foot__bar"><span>© Lynette Dhara Collection · Website concept</span><span>All photographs by the boutique, via Instagram</span><a href="#top">Back to top ↑</a></div>
 </footer>
 
 <!-- QUICK VIEW -->
 <dialog class="qv" id="qv" aria-labelledby="qv-title" data-lenis-prevent>
   <button type="button" class="x" data-close aria-label="Close">×</button>
   <div class="qv__grid">
-    <div class="qv__media"><div class="qv__img" id="qv-zoom" tabindex="0" aria-label="Photo. Click to zoom, move to pan."><img id="qv-img" alt=""></div>
-      <div class="qv__thumbs" id="qv-thumbs"></div></div>
+    <div class="qv__media"><div class="qv__img" id="qv-zoom" tabindex="0" aria-label="Photo. Click to zoom, move to pan."><img id="qv-img" alt=""></div><div class="qv__thumbs" id="qv-thumbs"></div></div>
     <div class="qv__info">
       <p class="label" id="qv-cat"></p>
       <h2 id="qv-title"></h2>
-      <p class="qv__price" id="qv-price">Price on enquiry</p>
+      <p class="qv__price">Price on enquiry</p>
       <p class="qv__colour"><i id="qv-dot"></i><span id="qv-colour"></span></p>
       <p class="qv__notes" id="qv-notes"></p>
       <button type="button" class="btn btn--gold btn--wide" id="qv-add">Add to bag +</button>
-      <a class="btn btn--ghost btn--wide" id="qv-wa" target="_blank" rel="noopener">Ask on WhatsApp</a>
-      <a class="link" id="qv-src" target="_blank" rel="noopener">See the original post ↗</a>
+      <a class="btn btn--line btn--wide" id="qv-wa" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      <a class="viewall" id="qv-src" target="_blank" rel="noopener">See the original post ↗</a>
       <p class="fine">No returns or exchanges.</p>
     </div>
   </div>
@@ -190,6 +155,5 @@
 <script defer src="../assets/vendor/Flip.min.js"></script>
 <script defer src="../assets/vendor/lenis.min.js"></script>
 <script defer src="store.js"></script>
-<script type="module" src="hero-gl.js"></script>
 </body>
 </html>
